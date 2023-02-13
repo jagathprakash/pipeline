@@ -32,6 +32,8 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
+	"go.uber.org/zap"
+
 	"github.com/spiffe/go-spiffe/v2/workloadapi"
 	"github.com/tektoncd/pipeline/pkg/apis/pipeline/v1beta1"
 	"github.com/tektoncd/pipeline/pkg/result"
@@ -97,7 +99,7 @@ func (sc *spireControllerAPIClient) VerifyStatusInternalAnnotation(ctx context.C
 	}
 
 	if !sc.CheckSpireVerifiedFlag(tr) {
-		return errors.New("annotation tekton.dev/not-verified = yes failed spire verification")
+		return errors.New("annotation tekton.dev/verified = no failed spire verification")
 	}
 
 	annotations := tr.Status.Annotations

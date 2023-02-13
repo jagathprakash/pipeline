@@ -107,7 +107,6 @@ function patch_pipeline_spire() {
       deployment tekton-pipelines-controller \
       -n tekton-pipelines \
       --patch-file "$DIR"/testdata/patch/pipeline-controller-spire.json
-
   verify_pipeline_installation
 }
 

@@ -316,6 +316,7 @@ func TestCheckAlphaOrBetaAPIFields(t *testing.T) {
 }
 
 func TestIsSpireEnabled(t *testing.T) {
+<<<<<<< HEAD
 	testCases := []struct {
 		name      string
 		configmap map[string]string
@@ -365,6 +366,24 @@ func TestIsSpireEnabled(t *testing.T) {
 		if tc.want != got {
 			t.Errorf("IsSpireEnabled() = %t, want %t", got, tc.want)
 		}
+	ctx := context.Background()
+	if config.IsSpireEnabled(ctx) {
+		t.Errorf("IsSpireEnabled got true but expected to be false")
+	}
+	store := config.NewStore(logging.FromContext(ctx).Named("config-store"))
+	featureflags := &corev1.ConfigMap{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: "feature-flags",
+		},
+		Data: map[string]string{
+			"enable-api-fields":         "alpha",
+			"enforce-nonfalsifiability": config.EnforceNonfalsifiabilityWithSpire,
+		},
+	}
+	store.OnConfigChanged(featureflags)
+	ctx = store.ToContext(ctx)
+	if !config.IsSpireEnabled(ctx) {
+		t.Errorf("IsSpireEnabled got false but expected to be true")
 	}
 }
 
